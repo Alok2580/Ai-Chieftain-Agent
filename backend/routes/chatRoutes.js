@@ -177,6 +177,7 @@ Spa Menu (selected):
 
 router.post("/", async (req, res) => {
   try {
+    const io = req.app.get("socketio");
     const { message, history, socketId } = req.body;
     if (!socketId) {
       return res.status(400).json({
@@ -457,7 +458,6 @@ router.post("/", async (req, res) => {
     }
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const io = req.app.get("socketio");
 
     const formattedHistory = history
       .map(
