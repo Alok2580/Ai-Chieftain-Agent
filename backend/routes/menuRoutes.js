@@ -11,6 +11,20 @@ router.get("/", async (_req, res) => {
   }
 });
 
+// New route to fetch items by category
+router.get("/:category", async (req, res) => {
+  try {
+    const { category } = req.params;
+    // Using a case-insensitive regex for robust matching
+    const items = await MenuItem.find({
+      category: { $regex: new RegExp(`^${category}$`, "i") },
+    }).sort({ name: 1 });
+    res.json(items);
+  } catch (e) {
+    res.status(500).json({ message: "Failed to fetch menu for category" });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { category, name, price, available } = req.body;
